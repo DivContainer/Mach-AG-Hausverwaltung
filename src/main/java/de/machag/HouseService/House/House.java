@@ -28,9 +28,11 @@ public class House {
 
     public House(String id, String addressFull, double purchasePrice, double rentPerMonth, HouseStatus status, String tennantId) {
         this.id = id;
+        this.addressFull = addressFull;
         this.purchasePrice = purchasePrice;
         this.rentPerMonth = rentPerMonth;
         this.status = status;
+        this.tennantId = tennantId;
     }
 
     public String getId() {

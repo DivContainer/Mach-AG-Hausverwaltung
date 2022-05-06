@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -16,22 +18,40 @@ public class HouseController {
     @Autowired
     HouseRepository houseRepository;
 
-    @GetMapping("house/info/id={houseid}")
+    @GetMapping("info/id={houseId}")
     @ResponseBody
-    public ResponseEntity getHouseById(@PathVariable int houseId) {
-        if(houseRepository.findById(houseId).isPresent()) {
+    public ResponseEntity getHouseById(@PathVariable String houseId) {
+        if(houseRepository.findById(houseId).isPresent() && houseRepository.findById(houseId).get() != null) {
             House targetHouse = houseRepository.findById(houseId).get();
             return ResponseEntity.ok(targetHouse.toString());
         }
-        return new ResponseEntity(HttpStatus.CONFLICT);
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("info/address={houseid}")
+    @GetMapping("info/address={addressFull}")
     @ResponseBody
     public ResponseEntity getHouseByAdressFull(@PathVariable String addressFull) {
         if(houseRepository.findByAddressFull(addressFull) != null) {
             House targetHouse = houseRepository.findById(addressFull).get();
             return ResponseEntity.ok(targetHouse.toString());
+        }
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("info/all")
+    @ResponseBody
+    public ResponseEntity getAllHouses() {
+        StringBuilder sb = new StringBuilder();
+        List<House> allHouses = houseRepository.findAll();
+        if(allHouses.size() > 0) {
+            for(int i = 0; i < allHouses.size(); i++) {
+                House house = allHouses.get(i);
+                sb.append(house.toString());
+                if (i < allHouses.size() - 1) {
+                    sb.append(",");
+                }
+            }
+            return ResponseEntity.ok(sb.toString());
         }
         return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
@@ -45,18 +65,14 @@ public class HouseController {
 
         double purchasePrice;
         double rentPerMonth;
+        HouseStatus houseStatus;
 
         try {
             purchasePrice = Double.parseDouble(purchasePriceString);
             rentPerMonth = Double.parseDouble(rentPerMonthString);
+            houseStatus = HouseStatus.parseString(statusString);
         } catch (NumberFormatException numberFormatException) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
-
-        HouseStatus houseStatus;
-
-        try {
-            houseStatus = HouseStatus.valueOf(statusString);
         } catch (IllegalArgumentException illegalArgumentException) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
@@ -79,7 +95,7 @@ public class HouseController {
         return ResponseEntity.ok("Added house: " + newHouse.toString());
     }
 
-    @DeleteMapping("house/delete/{addressFull}")
+    @DeleteMapping("{addressFull}")
     @ResponseBody
     public ResponseEntity deleteHouseByAddressFull(@PathVariable String addressFull) {
         House targetHouse = houseRepository.findByAddressFull(addressFull);
