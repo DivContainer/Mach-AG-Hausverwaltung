@@ -10,7 +10,8 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoRepositories(basePackageClasses =
 		{
 				TennantRepository.class,
-				HouseRepository.class
+				HouseRepository.class,
+				Util.class
 		})
 
 public class HouseServiceApplication {

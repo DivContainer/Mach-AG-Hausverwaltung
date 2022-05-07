@@ -3,6 +3,7 @@ package de.machag.HouseService.RESTController;
 import de.machag.HouseService.House.House;
 import de.machag.HouseService.House.HouseStatus;
 import de.machag.HouseService.House.HouseRepository;
+import de.machag.HouseService.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,9 @@ public class HouseController {
 
     @Autowired
     HouseRepository houseRepository;
+
+    @Autowired
+    Util utilities;
 
     @GetMapping("info/id={houseId}")
     @ResponseBody
@@ -41,17 +45,9 @@ public class HouseController {
     @GetMapping("info/all")
     @ResponseBody
     public ResponseEntity getAllHouses() {
-        StringBuilder sb = new StringBuilder();
         List<House> allHouses = houseRepository.findAll();
         if(allHouses.size() > 0) {
-            for(int i = 0; i < allHouses.size(); i++) {
-                House house = allHouses.get(i);
-                sb.append(house.toString());
-                if (i < allHouses.size() - 1) {
-                    sb.append(",");
-                }
-            }
-            return ResponseEntity.ok(sb.toString());
+            return ResponseEntity.ok(utilities.fancyPrintAll(allHouses));
         }
         return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
