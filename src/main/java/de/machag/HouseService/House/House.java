@@ -3,9 +3,11 @@ package de.machag.HouseService.House;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
+import org.springframework.data.annotation.Id;
 
 public class House {
 
+    @Id
     @Expose
     private String id;
 

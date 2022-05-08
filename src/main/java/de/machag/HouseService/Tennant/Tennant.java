@@ -3,9 +3,13 @@ package de.machag.HouseService.Tennant;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
+import org.springframework.data.annotation.Id;
+
+import java.util.Date;
 
 public class Tennant {
 
+    @Id
     @Expose
     private String id;
 
