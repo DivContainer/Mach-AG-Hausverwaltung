@@ -6,12 +6,13 @@ import com.google.gson.annotations.Expose;
 import org.springframework.data.annotation.Id;
 
 import java.util.Date;
+import java.util.Optional;
 
 public class Tennant {
 
     @Id
     @Expose
-    private String id;
+    private int id;
 
     @Expose
     private String firstName;
@@ -24,18 +25,17 @@ public class Tennant {
 
     protected Tennant() {}
 
-    public Tennant(String id, String firstName, String lastName, String emailAddress) {
-        this.id = id;
+    public Tennant(String firstName, String lastName, String emailAddress) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.emailAddress = emailAddress;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

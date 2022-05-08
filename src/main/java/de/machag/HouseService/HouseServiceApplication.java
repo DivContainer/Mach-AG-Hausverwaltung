@@ -1,19 +1,11 @@
 package de.machag.HouseService;
 
-import de.machag.HouseService.House.HouseRepository;
-import de.machag.HouseService.Tennant.TennantRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories;
 
 @SpringBootApplication
-@EnableMongoRepositories(basePackageClasses =
-		{
-				TennantRepository.class,
-				HouseRepository.class,
-				Util.class
-		})
-
+@EnableJdbcRepositories
 public class HouseServiceApplication {
 
 	public static void main(String[] args) {

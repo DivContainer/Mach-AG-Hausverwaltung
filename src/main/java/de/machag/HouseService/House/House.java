@@ -5,11 +5,13 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import org.springframework.data.annotation.Id;
 
+import java.util.UUID;
+
 public class House {
 
     @Id
     @Expose
-    private String id;
+    private int id;
 
     @Expose
     private String addressFull;
@@ -24,23 +26,14 @@ public class House {
     private HouseStatus status;
 
     @Expose
-    private String tennantId;
+    private int tennantId;
 
-    public House(String id, String addressFull, double purchasePrice, double rentPerMonth, HouseStatus status, String tennantId) {
-        this.id = id;
+    public House(String addressFull, double purchasePrice, double rentPerMonth, HouseStatus status, int tennantId) {
         this.addressFull = addressFull;
         this.purchasePrice = purchasePrice;
         this.rentPerMonth = rentPerMonth;
         this.status = status;
         this.tennantId = tennantId;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public double getPurchasePrice() {
@@ -75,11 +68,11 @@ public class House {
         this.addressFull = addressFull;
     }
 
-    public String getTennantId() {
+    public int getTennantId() {
         return tennantId;
     }
 
-    public void setTennantId(String tennantId) {
+    public void setTennantId(int tennantId) {
         this.tennantId = tennantId;
     }
 
