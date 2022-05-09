@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Optional;
 
 @RestController
@@ -73,7 +75,8 @@ public class HouseController {
                 purchasePrice,
                 rentPerMonth,
                 houseStatus,
-                0
+                0,
+                new Timestamp(new Date().getTime())
         );
 
         houseRepository.save(newHouse);

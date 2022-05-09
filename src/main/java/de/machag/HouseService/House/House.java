@@ -4,8 +4,17 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class House {
 
@@ -28,12 +37,20 @@ public class House {
     @Expose
     private int tennantId;
 
-    public House(String addressFull, double purchasePrice, double rentPerMonth, HouseStatus status, int tennantId) {
+    @Expose
+    private Timestamp buyDate;
+
+    @Expose
+    @Transient
+    String buyDateInfo;
+
+    public House(String addressFull, double purchasePrice, double rentPerMonth, HouseStatus status, int tennantId, Timestamp buyDate) {
         this.addressFull = addressFull;
         this.purchasePrice = purchasePrice;
         this.rentPerMonth = rentPerMonth;
         this.status = status;
         this.tennantId = tennantId;
+        this.buyDate = buyDate;
     }
 
     public double getPurchasePrice() {
@@ -76,9 +93,28 @@ public class House {
         this.tennantId = tennantId;
     }
 
+    public Timestamp getBuyDate() {
+        return buyDate;
+    }
+
+    public void setBuyDate(Timestamp buyDate) {
+        this.buyDate = buyDate;
+    }
+
     @Override
     public String toString() {
+        buyDateInfo = "Immobilie seit " + this.calculateDaysInOwnership(buyDate) + " Tage(n) im Besitz...";
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         return gson.toJson(this);
+    }
+
+    private int calculateDaysInOwnership(Timestamp dbBuyDate) {
+        Calendar c = Calendar.getInstance();
+        int days = 0;
+        while(c.getTimeInMillis() > dbBuyDate.getTime()) {
+            c.add(Calendar.DAY_OF_YEAR, -1);
+            days ++;
+        }
+        return days;
     }
 }
