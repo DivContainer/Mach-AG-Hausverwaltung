@@ -70,7 +70,10 @@ public class TennantController {
             List<House> rentedHouses = houseRepository.findHouseByTennantId(targetTennant.getId());
 
             if(rentedHouses.size() > 0) {
-                System.out.println("TENNANT HAS RENTED PROPERTIES");
+                for(House rentedHouse : rentedHouses) {
+                    rentedHouse.setTennantId(0);
+                    houseRepository.save(rentedHouse);
+                }
             }
 
             tennantRepository.delete(targetTennant);

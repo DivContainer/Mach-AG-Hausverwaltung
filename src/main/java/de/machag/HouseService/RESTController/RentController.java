@@ -2,6 +2,7 @@ package de.machag.HouseService.RESTController;
 
 import de.machag.HouseService.House.House;
 import de.machag.HouseService.House.HouseRepository;
+import de.machag.HouseService.House.HouseStatus;
 import de.machag.HouseService.Tennant.Tennant;
 import de.machag.HouseService.Tennant.TennantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,21 +30,19 @@ public class RentController {
         Optional<House> optionalHouse = houseRepository.findById(houseId);
         Optional<Tennant> optionalTennant = tennantRepository.findById(tennantId);
 
-        System.out.println(houseId);
-        System.out.println(tennantId);
-        System.out.println(forceBool);
-
         if(optionalHouse.isPresent() && optionalTennant.isPresent()) {
             House targetHouse = optionalHouse.get();
             Tennant targetTennant = optionalTennant.get();
 
             if(targetHouse.getTennantId() == 0) {
                 targetHouse.setTennantId(targetTennant.getId());
+                targetHouse.setStatus(HouseStatus.RENTED);
                 houseRepository.save(targetHouse);
                 return ResponseEntity.ok("Assigned new tennant to property");
             } else {
                 if(forceBool == true) {
                     targetHouse.setTennantId(targetTennant.getId());
+                    targetHouse.setStatus(HouseStatus.RENTED);
                     houseRepository.save(targetHouse);
                     return ResponseEntity.ok("Force-Assigned new tennant to property and overwritten the old tennant");
                 }
@@ -60,6 +59,7 @@ public class RentController {
             House targetHouse = optionalHouse.get();
             if(targetHouse.getTennantId() != 0) {
                 targetHouse.setTennantId(0);
+                targetHouse.setStatus(HouseStatus.FREE);
                 houseRepository.save(targetHouse);
                 return ResponseEntity.ok("Removed tennant from house");
             }
